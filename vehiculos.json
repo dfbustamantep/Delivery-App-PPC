@@ -1,0 +1,37 @@
+[
+  {
+    "placa": "ABC123",
+    "modelo": "Modelo 4",
+    "color": "Negro",
+    "marca": "Marca D",
+    "capacidadCarga": "1000"
+  },
+  {
+    "placa": "XYZ456",
+    "modelo": "Modelo 3",
+    "color": "Rojo",
+    "marca": "Marca C",
+    "capacidadCarga": "1000 kg"
+  },
+  {
+    "placa": "asf123",
+    "modelo": "asgasg",
+    "color": "asgsag",
+    "marca": "sabn",
+    "capacidadCarga": "sagsaga"
+  },
+  {
+    "placa": "GHI102",
+    "modelo": "Modelo 4",
+    "color": "Negro",
+    "marca": "Marca D",
+    "capacidadCarga": "1004"
+  },
+  {
+    "placa": "LMN569",
+    "modelo": "corsa",
+    "color": "blanco",
+    "marca": "corsa",
+    "capacidadCarga": "150"
+  }
+]

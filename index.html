@@ -1,24 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="img/png" href="images/icon.png" />
-    <title>Delivery APP</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <header>
-        <h1>Delivery App</h1>
-    </header>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+        <link rel="icon" type="img/jpg" href="images/carro.png" />
+        <title>Gestión de Rutas de Entrega</title>
+        <link rel="stylesheet" href="estilos.css">
+    </head>
+
+
     <body>
+        <header>
+            <h1>Gestión de Rutas de Entrega</h1>
+        </header>
+
+        <nav>
+            <a href="#" id="vehiculos-link">Vehículos</a>
+            <a href="#" id="conductores-link">Conductores</a>
+            <a href="#" id="rutas-link">Rutas</a>
+        </nav>
+
         <main>
+            <!-- Sección de Vehículos -->
+            <section id="vehiculos">
+                <h2>Gestión de Vehículos</h2>
+                <!-- Formulario de Vehículos -->
+                <form id="formVehiculo">
+                    <label for="Placa">Placa:</label>
+                    <input type="text" id="placa" placeholder="Digite la placa" required>
+                    <label for="modelo">Modelo:</label>
+                    <input type="text" id="modelo" placeholder="Digite modelo del vehículo" required>
+                    <label for="color">Color:</label>
+                    <input type="text" id="color" placeholder="Digite el color" required>
+                    <label for="marca">Marca:</label>
+                    <input type="text" id="marca" placeholder="Digite la marca" required>
+                    <label for="capacidadCarga">Capacidad de carga:</label>
+                    <input type="number" id="capacidadCarga" placeholder="Digite la apacidad de carga" required>
 
+                    <div class="form-buttons">
+                        <button type="button" onclick="registrarVehiculo()">Registrar</button>
+                        <button type="button" onclick="editarVehiculo()">Actualizar</button>
+                    </div>
+
+                </form>
+
+                <br>
+                <!-- Consultar Vehículos -->
+                <input type="text" id="placaBuscar" placeholder="Buscar o Eliminar por Placa">
+                <button onclick="consultarTodosVehiculos()">Consultar Todos</button>
+                <button onclick="buscarPorPlaca()">Buscar</button>
+                <button type="button" onclick="eliminarVehiculo()">Eliminar</button>
+
+                <!-- Tabla de Vehículos -->
+                <table id="tabla-vehiculos">
+                    <thead>
+                        <tr>
+                            <th>Placa</th>
+                            <th>Modelo</th>
+                            <th>Color</th>
+                            <th>Marca</th>
+                            <th>Capacidad de Carga</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- Sección de Conductores -->
+            <section id="conductores">
+
+                <h2>Gestión de Conductores</h2>
+
+                <!-- Formulario de Conductores -->
+                <form id="formConductor">
+                    <label for="id">Documento:</label>
+                    <input type="text" id="id" placeholder="Digite documento" required>
+                    <label for="nombres">Nombre:</label>
+                    <input type="text" id="nombres" placeholder="Digite nombre" required>
+                    <label for="apellidos">Apellidos:</label>
+                    <input type="text" id="apellidos" placeholder="Digite apellidos" required>
+                    <label for="numeroLicencia">Número de licencia:</label>
+                    <input type="text" id="numeroLicencia" placeholder="Digite número de licencia" required>
+                    <label for="telefono">Telefono de contacto:</label>
+                    <input type="text" id="telefono" placeholder="Digite telefono" required>
+                    <label for="correo">Correo electronico:</label>
+                    <input type="email" id="correo" placeholder="Digite correo electronico" required>
+                    
+                    <div class="form-buttons">
+                        <button type="button" onclick="registrarConductor()">Registrar</button>
+                        <button type="button" onclick="editarConductor()">Actualizar</button>
+                    </div>
+                    
+
+                </form>
+
+                <br>
+
+                <!-- Consultar Conductores -->
+                <input type="text" id="idBuscar" placeholder="Buscar o Eliminar x ID">
+                <button onclick="consultarTodos()">Consultar Todos</button>
+                <button onclick="buscarPorID()">Buscar</button>
+                <button type="button" onclick="eliminarConductor()">Eliminar</button>
+
+                <!-- Tabla de Conductores -->
+                <table id="tabla-conductores">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Número de Licencia</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+
+            <!-- Sección de Rutas -->
+            <section id="rutas" class="active">
+                <h2>Gestión de Rutas</h2>
+                <iframe src="mapa.html" width="100%" height="600px" style="border:none;"></iframe>
+            </section>
         </main>
-        <script src="./app.js"></script>
-    </body>
-    <footer>
 
-    </footer>
-</body>
+        <footer>
+            <p>&copy; 2025 Gestión de Rutas de Entrega</p>
+        </footer>
+
+        <script src="conductor.js"></script>
+        <script src="vehiculo.js"></script>
+        <script src="scripts.js"></script>
+    </body>
+
 </html>
