@@ -162,68 +162,9 @@ function calcularRuta() {
         .catch(error => console.error('Error al calcular la ruta:', error));
 }
 
-// Función para guardar la ruta
-function guardarRuta() {
-    var conductor = document.getElementById('conductor').value;
-    var vehiculo = document.getElementById('vehiculo').value;
-    var fecha = document.getElementById('fecha').value;
 
-    if (!conductor || !vehiculo || !fecha || puntosEntrega.length === 0) {
-        alert('Por favor, completa todos los campos y calcula la ruta antes de guardar.');
-        return;
-    }
 
-    var ruta = {
-        conductor: conductor,
-        vehiculo: vehiculo,
-        fecha: fecha,
-        bodega: { lat: bodega[0], lng: bodega[1] },
-        puntosEntrega: puntosEntrega.map(p => { return { lat: p[0], lng: p[1] }; }),
-        detalles: [] // Nuevo array para almacenar detalles de cada parada
-    };
 
-    if (indiceRutaEditando !== null) {
-        rutasProgramadas[indiceRutaEditando] = ruta;
-        indiceRutaEditando = null;
-    } else {
-        rutasProgramadas.push(ruta);
-    }
-
-    actualizarListaRutas();
-    limpiarFormulario();
-    guardarRutasEnLocalStorage();
-}
-// Función para guardar rutas en localStorage
-function guardarRutasEnLocalStorage() {
-    localStorage.setItem('rutasProgramadas', JSON.stringify(rutasProgramadas));
-    alert('Rutas guardadas correctamente.');
-}
-
-// Función para cargar rutas desde localStorage
-function cargarRutasDesdeLocalStorage() {
-    var rutasGuardadas = localStorage.getItem('rutasProgramadas');
-    if (rutasGuardadas) {
-        rutasProgramadas = JSON.parse(rutasGuardadas);
-        actualizarListaRutas();
-    }
-}
-
-// Función para descargar JSON
-function descargarJSON() {
-    if (rutasProgramadas.length === 0) {
-        alert('No hay rutas programadas para descargar.');
-        return;
-    }
-
-    var jsonString = JSON.stringify(rutasProgramadas, null, 2);
-    var blob = new Blob([jsonString], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'rutas_programadas.json';
-    a.click();
-    URL.revokeObjectURL(url);
-}
 
 // Función para limpiar el formulario
 function limpiarFormulario() {
@@ -313,7 +254,152 @@ function editarRuta(index) {
     puntosEntrega = ruta.puntosEntrega.map(p => [p.lat, p.lng]);
     calcularRuta();
 }
+function guardarRuta() {
+    var conductor = document.getElementById('conductor').value;
+    var vehiculo = document.getElementById('vehiculo').value;
+    var fecha = document.getElementById('fecha').value;
 
+    if (!conductor || !vehiculo || !fecha || puntosEntrega.length === 0) {
+        alert('Por favor, completa todos los campos y calcula la ruta antes de guardar.');
+        return;
+    }
+
+    var ruta = {
+        conductor: conductor,
+        vehiculo: vehiculo,
+        fecha: fecha,
+        bodega: { lat: bodega[0], lng: bodega[1] },
+        puntosEntrega: puntosEntrega.map(p => { return { lat: p[0], lng: p[1] }; }),
+        detalles: [] // Array para almacenar detalles de cada parada
+    };
+
+    // Enviar la ruta al servidor
+    fetch('/rutas/guardar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            matricula: vehiculo, // Usar la placa del vehículo como identificador
+            ruta: ruta
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Ruta guardada correctamente');
+        cargarRutas(); // Recargar las rutas después de guardar
+        limpiarFormulario();
+    })
+    .catch(error => {
+        console.error('Error al guardar la ruta:', error);
+        alert('Error al guardar la ruta');
+    });
+}
+
+// Función para cargar rutas desde el servidor
+function cargarRutas() {
+    fetch('/rutas')
+        .then(response => response.json())
+        .then(data => {
+            rutasProgramadas = Object.values(data); // Convertir el objeto en array
+            actualizarListaRutas();
+        })
+        .catch(error => {
+            console.error('Error al cargar las rutas:', error);
+        });
+}
+
+// Función para guardar detalles de la ruta
+function guardarDetallesRuta(index) {
+    var ruta = rutasProgramadas[index];
+    ruta.puntosEntrega.forEach(function (punto, i) {
+        punto.direccion = document.getElementById(`direccion-${i}`).value;
+        punto.paquetes = parseInt(document.getElementById(`paquetes-${i}`).value);
+    });
+
+    // Enviar la actualización al servidor
+    fetch('/rutas/guardar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            matricula: ruta.vehiculo,
+            ruta: ruta
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Detalles guardados correctamente');
+        cargarRutas(); // Recargar las rutas
+    })
+    .catch(error => {
+        console.error('Error al guardar los detalles:', error);
+        alert('Error al guardar los detalles');
+    });
+}
+
+// Función para filtrar rutas
+function filtrarRutas() {
+    const conductor = document.getElementById('buscar-conductor').value.toLowerCase();
+    const vehiculo = document.getElementById('buscar-vehiculo').value.toLowerCase();
+    const fecha = document.getElementById('buscar-fecha').value;
+
+    fetch('/rutas')
+        .then(response => response.json())
+        .then(data => {
+            const rutas = Object.values(data);
+            const rutasFiltradas = rutas.filter(ruta => {
+                return (!conductor || ruta.conductor.toLowerCase().includes(conductor)) &&
+                       (!vehiculo || ruta.vehiculo.toLowerCase().includes(vehiculo)) &&
+                       (!fecha || ruta.fecha === fecha);
+            });
+            actualizarListaRutas(rutasFiltradas);
+        })
+        .catch(error => {
+            console.error('Error al filtrar las rutas:', error);
+        });
+}
+
+// Modificar la función actualizarListaRutas para incluir un botón de eliminar
+function actualizarListaRutas(rutas = rutasProgramadas) {
+    var listaRutas = document.getElementById('lista-rutas');
+    listaRutas.innerHTML = '';
+
+    rutas.forEach(function (ruta, index) {
+        var rutaItem = document.createElement('div');
+        rutaItem.className = 'ruta-item';
+        rutaItem.innerHTML = `
+            <strong>Ruta ${index + 1}:</strong><br>
+            Conductor: ${ruta.conductor}<br>
+            Vehículo: ${ruta.vehiculo}<br>
+            Fecha: ${ruta.fecha}<br>
+            Puntos de entrega: ${ruta.puntosEntrega.length}
+            <button onclick="editarRuta(${index})">Editar</button>
+            <button onclick="mostrarDetallesRuta(${index})">Detalles</button>
+            <button onclick="eliminarRuta('${ruta.vehiculo}')">Eliminar</button>
+        `;
+        listaRutas.appendChild(rutaItem);
+    });
+}
+
+// Función para eliminar una ruta
+function eliminarRuta(matricula) {
+    if (confirm('¿Está seguro de que desea eliminar esta ruta?')) {
+        fetch(`/rutas/eliminar/${matricula}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Ruta eliminada correctamente');
+            cargarRutas(); // Recargar las rutas
+        })
+        .catch(error => {
+            console.error('Error al eliminar la ruta:', error);
+            alert('Error al eliminar la ruta');
+        });
+    }
+}
 function mostrarDetallesRuta(index) {
     var ruta = rutasProgramadas[index];
     var contenido = document.getElementById('detalles-contenido');
@@ -342,41 +428,52 @@ function mostrarDetallesRuta(index) {
     contenido.appendChild(botonGuardar);
 }
 
-function guardarDetallesRuta(index) {
-    var ruta = rutasProgramadas[index];
-    ruta.puntosEntrega.forEach(function (punto, i) {
-        punto.direccion = document.getElementById(`direccion-${i}`).value;
-        punto.paquetes = parseInt(document.getElementById(`paquetes-${i}`).value);
-    });
 
-    actualizarListaRutas();
-    guardarRutasEnLocalStorage();
-    alert('Detalles guardados correctamente.');
+
+// Estas funciones deben estar fuera del DOMContentLoaded para que sean accesibles globalmente
+function cargarConductores() {
+    fetch("conductores.json")
+        .then((response) => response.json())
+        .then((conductores) => {
+            const selectConductor = document.getElementById("conductor");
+            if (selectConductor) {
+                selectConductor.innerHTML = '<option value="">Seleccione un conductor</option>';
+                conductores.forEach((conductor) => {
+                    const option = document.createElement("option");
+                    option.value = conductor.id;
+                    option.textContent = `${conductor.nombres} ${conductor.apellidos}`;
+                    selectConductor.appendChild(option);
+                });
+            }
+        })
+        .catch((error) => console.error("Error al cargar conductores:", error));
 }
 
-// Función para actualizar la lista de rutas
-function actualizarListaRutas(rutas = rutasProgramadas) {
-    var listaRutas = document.getElementById('lista-rutas');
-    listaRutas.innerHTML = '';
-
-    rutas.forEach(function (ruta, index) {
-        var rutaItem = document.createElement('div');
-        rutaItem.className = 'ruta-item';
-        rutaItem.innerHTML = `
-                    <strong>Ruta ${index + 1}:</strong><br>
-                    Conductor: ${ruta.conductor}<br>
-                    Vehículo: ${ruta.vehiculo}<br>
-                    Fecha: ${ruta.fecha}<br>
-                    Puntos de entrega: ${ruta.puntosEntrega.length}
-                    <button onclick="editarRuta(${index})">Editar</button>
-                    <button onclick="mostrarDetallesRuta(${index})">Detalles</button>
-                `;
-        listaRutas.appendChild(rutaItem);
-    });
+function cargarVehiculos() {
+    fetch("vehiculos.json")
+        .then((response) => response.json())
+        .then((vehiculos) => {
+            const selectVehiculo = document.getElementById("vehiculo");
+            if (selectVehiculo) {
+                selectVehiculo.innerHTML = '<option value="">Seleccione un vehículo</option>';
+                vehiculos.forEach((vehiculo) => {
+                    const option = document.createElement("option");
+                    option.value = vehiculo.placa;
+                    option.textContent = `${vehiculo.placa} - ${vehiculo.marca} ${vehiculo.modelo}`;
+                    selectVehiculo.appendChild(option);
+                });
+            }
+        })
+        .catch((error) => console.error("Error al cargar vehículos:", error));
 }
+
+// El evento DOMContentLoaded original
+document.addEventListener("DOMContentLoaded", function() {
+    // Cargar datos iniciales
+    cargarRutas();
+    cargarConductores();
+    cargarVehiculos();
+});
 
 // Inicializar los eventos para los botones existentes
 document.querySelectorAll('.input-coordenada').forEach(addSearchButtonListener);
-
-// Cargar rutas al iniciar la página
-cargarRutasDesdeLocalStorage();

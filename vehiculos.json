@@ -1,12 +1,5 @@
 [
   {
-    "placa": "ABC123",
-    "modelo": "Modelo 4",
-    "color": "Negro",
-    "marca": "Marca D",
-    "capacidadCarga": "1000"
-  },
-  {
     "placa": "XYZ456",
     "modelo": "Modelo 3",
     "color": "Rojo",
@@ -33,5 +26,33 @@
     "color": "blanco",
     "marca": "corsa",
     "capacidadCarga": "150"
+  },
+  {
+    "placa": "HOL321",
+    "modelo": "asgsag",
+    "color": "saha",
+    "marca": "sahahsa",
+    "capacidadCarga": "134"
+  },
+  {
+    "placa": "ZON321",
+    "modelo": "asds",
+    "color": "sagsa",
+    "marca": "gasg",
+    "capacidadCarga": "123"
+  },
+  {
+    "placa": "KAS321",
+    "modelo": "safsag",
+    "color": "asgsag",
+    "marca": "asgsag",
+    "capacidadCarga": "123"
+  },
+  {
+    "placa": "KLJ123",
+    "modelo": "maria",
+    "color": "negro",
+    "marca": "asd",
+    "capacidadCarga": "100"
   }
 ]

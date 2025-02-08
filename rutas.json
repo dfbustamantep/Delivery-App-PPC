@@ -1,3 +1,42 @@
-[
-  {}
-]
+{
+  "XYZ456": {
+    "conductor": "1",
+    "vehiculo": "XYZ456",
+    "fecha": "2025-02-05",
+    "bodega": {
+      "lat": 4.757786586246297,
+      "lng": -74.04488664305592
+    },
+    "puntosEntrega": [
+      {
+        "lat": 4.601403,
+        "lng": -74.064905
+      }
+    ],
+    "detalles": []
+  },
+  "KLJ123": {
+    "conductor": "12",
+    "vehiculo": "KLJ123",
+    "fecha": "2025-02-20",
+    "bodega": {
+      "lat": 4.757786586246297,
+      "lng": -74.04488664305592
+    },
+    "puntosEntrega": [
+      {
+        "lat": 4.57926,
+        "lng": -74.157941,
+        "direccion": "tv3123123",
+        "paquetes": 3
+      },
+      {
+        "lat": 4.588669,
+        "lng": -74.194767,
+        "direccion": "sgsagasg",
+        "paquetes": 3
+      }
+    ],
+    "detalles": []
+  }
+}
