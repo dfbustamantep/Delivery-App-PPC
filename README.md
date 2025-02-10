@@ -36,3 +36,8 @@
 - Acceder a la aplicación desde el navegador en: http://localhost:5500
 
 
+### Diagramas
+#### Diagrama de componentes
+![](https://github.com/dfbustamantep/Delivery-App-PPC/blob/main/Diagramas/Diagrama%20de%20componentes.png)
+#### Diagrama de despliegue
+![](https://github.com/dfbustamantep/Delivery-App-PPC/blob/main/Diagramas/Diagrama%20de%20despliegue.png)
