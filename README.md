@@ -41,3 +41,10 @@
 ![](https://github.com/dfbustamantep/Delivery-App-PPC/blob/main/Diagramas/Diagrama%20de%20componentes.png)
 #### Diagrama de despliegue
 ![](https://github.com/dfbustamantep/Delivery-App-PPC/blob/main/Diagramas/Diagrama%20de%20despliegue.png)
+
+### Autores
+- Andrés Julián Barreto Puerto - 20221578067 
+- Santiago Suancha - 20221578057 
+- Juan David López Marcelo - 20221578058 
+- Daniel Felipe Bustamante Pérez - 20221578028
+
