@@ -44,7 +44,7 @@
 
 ### Autores
 - Andrés Julián Barreto Puerto - 20221578067 
-- Santiago Suancha - 20221578057 
+- Daniel Santiago Suancha - 20221578057 
 - Juan David López Marcelo - 20221578058 
 - Daniel Felipe Bustamante Pérez - 20221578028
 
